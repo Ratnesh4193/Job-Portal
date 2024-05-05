@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Grid } from "@mui/material";
 import JobCard from "../components/JobCard";
 import ChipComponent from "../components/ChipComponent";
+import CustomDropDown from "../components/CustomDropDown";
 
 const ITEM_FETCHED_PER_PAGE = 12;
 const JOB_API = "https://api.weekday.technology/adhoc/getSampleJdJSON";
@@ -111,6 +112,13 @@ const DashBoard = () => {
   return (
     <div>
       <div className="flex flex-row flex-wrap">
+        {/* CustomDropdown for Experience */}
+        <CustomDropDown
+          title="Experience"
+          items={experienceList}
+          selectedItem={selectedExperience}
+          setSelectedItem={setSelectedExperience}
+        />
         {/* ChipComponent for Location */}
         <ChipComponent
           title="Location"
@@ -124,6 +132,13 @@ const DashBoard = () => {
           items={roleList}
           selectedItems={selectedRole}
           setSelectedItems={setSelectedRole}
+        />
+        {/* CustomDropdown for Base Salary */}
+        <CustomDropDown
+          title="Min. Base Salary"
+          items={baseSalaryList}
+          selectedItem={selectedBaseSalary}
+          setSelectedItem={setSelectedBaseSalary}
         />
       </div>
       {/* Container for the grid */}
