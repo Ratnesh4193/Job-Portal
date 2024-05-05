@@ -1,7 +1,8 @@
 import "./App.css";
+import DashBoard from "./pages/DashBoard";
 
 function App() {
-  return <div>qwerty</div>;
+  return <DashBoard />;
 }
 
 export default App;
