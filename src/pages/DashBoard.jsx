@@ -3,6 +3,7 @@ import { Grid } from "@mui/material";
 import JobCard from "../components/JobCard";
 import ChipComponent from "../components/ChipComponent";
 import CustomDropDown from "../components/CustomDropDown";
+import CustomTextBox from "../components/CustomTextBox";
 
 const ITEM_FETCHED_PER_PAGE = 12;
 const JOB_API = "https://api.weekday.technology/adhoc/getSampleJdJSON";
@@ -32,6 +33,7 @@ const DashBoard = () => {
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedRole, setSelectedRole] = useState([]);
   const [selectedBaseSalary, setSelectedBaseSalary] = useState([]);
+  const [companyName, setCompanyName] = useState("");
 
   //Fetches jobs from the API and updates the state with the fetched jobs.
   //It also updates the last job fetched and sets the loading state.
@@ -139,6 +141,12 @@ const DashBoard = () => {
           items={baseSalaryList}
           selectedItem={selectedBaseSalary}
           setSelectedItem={setSelectedBaseSalary}
+        />
+        {/* CustomTextBox for Company Name */}
+        <CustomTextBox
+          title="Search Company Name"
+          value={companyName}
+          selectedValue={setCompanyName}
         />
       </div>
       {/* Container for the grid */}
