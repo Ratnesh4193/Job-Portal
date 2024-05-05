@@ -9,6 +9,7 @@ const DashBoard = () => {
   const [loading, setLoading] = useState(false);
   const [lastJobFetched, setLastJobFetched] = useState(0);
   const [jobs, setJobs] = useState([]);
+  const observer = useRef(null);
 
   //Fetches jobs from the API and updates the state with the fetched jobs.
   //It also updates the last job fetched and sets the loading state.
@@ -52,7 +53,39 @@ const DashBoard = () => {
   useEffect(() => {
     // Call the fetchJobs function when the component mounts
     fetchJobs();
+
+    // Clean up function to disconnect the observer when the component unmounts
+    return () => {
+      if (observer.current) observer.current.disconnect();
+    };
   }, []);
+
+  //useCallback hook to create an IntersectionObserver and observe the last element in the list.
+  //Fetches more jobs when the last element is intersecting with the viewport.
+  //Disconnects the observer when the component unmounts or when the loading state changes.
+  const lastElementRef = useCallback(
+    (node) => {
+      // Return early if the loading state is true
+      if (loading) return;
+
+      // Disconnect the observer if it exists
+      if (observer.current) observer.current.disconnect();
+
+      // Create a new IntersectionObserver
+      observer.current = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          // Fetch more jobs when the last element is intersecting with the viewport
+          if (entry.isIntersecting) {
+            fetchJobs();
+          }
+        });
+      });
+
+      // Observe the last element if it exists
+      if (node) observer.current.observe(node);
+    },
+    [loading]
+  );
 
   return (
     <div>
@@ -68,6 +101,8 @@ const DashBoard = () => {
               </Grid>
             </React.Fragment>
           ))}
+        {/* Div element to serve as the last element for the IntersectionObserver */}
+        <div ref={lastElementRef}></div>
       </Grid>
     </div>
   );
