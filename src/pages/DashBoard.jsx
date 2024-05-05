@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Grid } from "@mui/material";
 import JobCard from "../components/JobCard";
 import ChipComponent from "../components/ChipComponent";
@@ -29,11 +35,11 @@ const DashBoard = () => {
   const [lastJobFetched, setLastJobFetched] = useState(0);
   const [jobs, setJobs] = useState([]);
   const observer = useRef(null);
-  const [selectedExperience, setSelectedExperience] = useState(0);
+  const [selectedExperience, setSelectedExperience] = useState("");
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedRole, setSelectedRole] = useState([]);
-  const [selectedBaseSalary, setSelectedBaseSalary] = useState([]);
-  const [companyName, setCompanyName] = useState("");
+  const [selectedBaseSalary, setSelectedBaseSalary] = useState("");
+  const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
   //Fetches jobs from the API and updates the state with the fetched jobs.
   //It also updates the last job fetched and sets the loading state.
@@ -111,6 +117,87 @@ const DashBoard = () => {
     [loading]
   );
 
+  const filteredJobs = useMemo(() => {
+    return jobs.filter((job) => {
+      const { jobRole, minExp, location, minJdSalary, companyName } = job;
+
+      // Check if the job role is not selected or does not match the selected role
+      const isRoleMismatch =
+        selectedRole.length > 0 && !selectedRole.includes(jobRole);
+
+      // Check if the selected experience is less than the minimum experience required for the job
+      const isExperienceMismatch =
+        parseInt(selectedExperience) < minExp && selectedExperience !== "";
+
+      // Check if the selected location is "remote" but the job location is not "remote"
+      const isLocationMismatchRemote =
+        selectedLocation.includes("remote") &&
+        location.toLowerCase() !== "remote";
+
+      // Check if the selected location is "onsite" but the job location is "remote"
+      const isLocationMismatchOnsite =
+        selectedLocation.includes("onsite") &&
+        location.toLowerCase() === "remote";
+
+      // Check if the selected base salary is less than the minimum job salary
+      const isSalaryMismatch =
+        minJdSalary &&
+        minJdSalary < parseInt(selectedBaseSalary.split("L")[0]) &&
+        selectedBaseSalary !== "";
+
+      // Check if the selected company name is not included in the job company name
+      const isCompanyNameMismatch =
+        companyName !== "" &&
+        !companyName.toLowerCase().includes(selectedCompanyName.toLowerCase());
+
+      // Check if the job role is null but a role is selected
+      const isRoleNullMismatch = jobRole === null && selectedRole.length > 0;
+
+      // Check if the selected experience is null but a value is provided
+      const isExperienceNullMismatch =
+        minExp === null && selectedExperience !== "";
+
+      // Check if the selected location is null but a value is provided
+      const isLocationNullMismatch =
+        location === null && selectedLocation.length > 0;
+
+      // Check if the selected base salary is null but a value is provided
+      const isSalaryNullMismatch =
+        minJdSalary === null && selectedBaseSalary !== "";
+
+      // Check if the selected company name is null but a value is provided
+      const isCompanyNameNullMismatch =
+        companyName === null && selectedCompanyName !== "";
+
+      // If any of the conditions are true, return false to exclude the job from the filtered list
+      if (
+        isRoleMismatch ||
+        isExperienceMismatch ||
+        isLocationMismatchRemote ||
+        isLocationMismatchOnsite ||
+        isSalaryMismatch ||
+        isCompanyNameMismatch ||
+        isRoleNullMismatch ||
+        isExperienceNullMismatch ||
+        isLocationNullMismatch ||
+        isSalaryNullMismatch ||
+        isCompanyNameNullMismatch
+      ) {
+        return false;
+      }
+
+      // If all conditions pass, include the job in the filtered list
+      return true;
+    });
+  }, [
+    jobs,
+    selectedRole,
+    selectedExperience,
+    selectedLocation,
+    selectedBaseSalary,
+    selectedCompanyName,
+  ]);
+
   return (
     <div>
       <div className="flex flex-row flex-wrap">
@@ -145,15 +232,15 @@ const DashBoard = () => {
         {/* CustomTextBox for Company Name */}
         <CustomTextBox
           title="Search Company Name"
-          value={companyName}
-          selectedValue={setCompanyName}
+          value={selectedCompanyName}
+          selectedValue={setSelectedCompanyName}
         />
       </div>
       {/* Container for the grid */}
       <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }}>
         {/* Map over the jobs array and render a JobCard for each job */}
-        {jobs &&
-          jobs.map((job, index) => (
+        {filteredJobs &&
+          filteredJobs.map((job, index) => (
             <React.Fragment key={`${job.jdUid}-${index}`}>
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 {/* Render the JobCard component with the current job */}
