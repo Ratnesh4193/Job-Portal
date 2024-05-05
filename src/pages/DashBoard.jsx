@@ -5,14 +5,32 @@ import ChipComponent from "../components/ChipComponent";
 
 const ITEM_FETCHED_PER_PAGE = 12;
 const JOB_API = "https://api.weekday.technology/adhoc/getSampleJdJSON";
+const experienceList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const locationList = ["onsite", "remote", "hybrid"];
 const roleList = ["frontend", "ios", "android", "tech lead", "backend"];
+const baseSalaryList = [
+  "0L",
+  "10L",
+  "20L",
+  "30L",
+  "40L",
+  "50L",
+  "60L",
+  "70L",
+  "80L",
+  "90L",
+  "100L",
+];
 
 const DashBoard = () => {
   const [loading, setLoading] = useState(false);
   const [lastJobFetched, setLastJobFetched] = useState(0);
   const [jobs, setJobs] = useState([]);
   const observer = useRef(null);
+  const [selectedExperience, setSelectedExperience] = useState(0);
+  const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedRole, setSelectedRole] = useState([]);
+  const [selectedBaseSalary, setSelectedBaseSalary] = useState([]);
 
   //Fetches jobs from the API and updates the state with the fetched jobs.
   //It also updates the last job fetched and sets the loading state.
@@ -92,7 +110,14 @@ const DashBoard = () => {
 
   return (
     <div>
-      <div>
+      <div className="flex flex-row flex-wrap">
+        {/* ChipComponent for Location */}
+        <ChipComponent
+          title="Location"
+          items={locationList}
+          selectedItems={selectedLocation}
+          setSelectedItems={setSelectedLocation}
+        />
         {/* ChipComponent for Roles */}
         <ChipComponent
           title="Roles"
