@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Grid } from "@mui/material";
 import JobCard from "../components/JobCard";
+import ChipComponent from "../components/ChipComponent";
 
 const ITEM_FETCHED_PER_PAGE = 12;
 const JOB_API = "https://api.weekday.technology/adhoc/getSampleJdJSON";
+const roleList = ["frontend", "ios", "android", "tech lead", "backend"];
 
 const DashBoard = () => {
   const [loading, setLoading] = useState(false);
   const [lastJobFetched, setLastJobFetched] = useState(0);
   const [jobs, setJobs] = useState([]);
   const observer = useRef(null);
+  const [selectedRole, setSelectedRole] = useState([]);
 
   //Fetches jobs from the API and updates the state with the fetched jobs.
   //It also updates the last job fetched and sets the loading state.
@@ -89,6 +92,15 @@ const DashBoard = () => {
 
   return (
     <div>
+      <div>
+        {/* ChipComponent for Roles */}
+        <ChipComponent
+          title="Roles"
+          items={roleList}
+          selectedItems={selectedRole}
+          setSelectedItems={setSelectedRole}
+        />
+      </div>
       {/* Container for the grid */}
       <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }}>
         {/* Map over the jobs array and render a JobCard for each job */}
