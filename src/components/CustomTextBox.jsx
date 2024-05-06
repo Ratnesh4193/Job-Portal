@@ -1,5 +1,5 @@
 const CustomTextBox = (props) => {
-  const { title, value, selectedValue } = props;
+  const { title, value, setter } = props;
 
   return (
     <div className="w-fit h-auto p-2 m-2 shadow-md text-left">
@@ -14,7 +14,7 @@ const CustomTextBox = (props) => {
           type="text"
           placeholder={title}
           value={value}
-          onChange={(e) => selectedValue(e.target.value)}
+          onChange={(e) => setter(e.target.value)}
           className="p-1 bg-white border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         />
       </div>

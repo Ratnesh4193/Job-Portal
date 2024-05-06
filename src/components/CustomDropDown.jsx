@@ -1,10 +1,5 @@
-/**
- * A custom dropdown component that displays a title and a dropdown menu of items.
- * The selected item can be updated by clicking on an item in the dropdown menu.
- */
-
 const CustomDropDown = (props) => {
-  const { title, items, selectedItem, setSelectedItem } = props;
+  const { title, items, selectedItem, setter } = props;
 
   /**
    * Handles the click event when an item is clicked in the dropdown menu.
@@ -13,7 +8,7 @@ const CustomDropDown = (props) => {
    * @param item - The clicked item
    */
   const handleItemClick = (item) => {
-    setSelectedItem(item);
+    setter(item);
   };
 
   return (

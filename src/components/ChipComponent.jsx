@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Chip from "./Chip";
 
 const ChipComponent = (props) => {
-  const { items, selectedItems, setSelectedItems, title } = props;
+  const { items, selectedItems, addChip, removeChip, title } = props;
   const [availableItems, setAvailableItems] = useState(items);
   const [alreadyHighlighted, setAlreadyHighlighted] = useState(0);
   const [filterTerm, setFilterTerm] = useState("");
@@ -28,7 +28,7 @@ const ChipComponent = (props) => {
     (item) => {
       console.log("handleChipClick-item: ", item);
       // Add the selected item to the selectedItems array
-      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, item]);
+      addChip(item);
 
       // Remove the item from the availableItems array
       setAvailableItems((prevAvailableItems) =>
@@ -38,7 +38,7 @@ const ChipComponent = (props) => {
       // Reset the filter term
       setFilterTerm("");
     },
-    [selectedItems, availableItems, setSelectedItems, setAvailableItems]
+    [selectedItems, availableItems, addChip, setAvailableItems]
   );
 
   // This handleFilterChange function updates the filterTerm state and resets the alreadyHighlighted value
@@ -58,9 +58,7 @@ const ChipComponent = (props) => {
   const handleChipDelete = useCallback(
     (deletedItem) => {
       // Remove the deletedItem from the selectedItems array
-      setSelectedItems((prevSelectedItems) =>
-        prevSelectedItems.filter((chipItem) => chipItem !== deletedItem)
-      );
+      removeChip(deletedItem);
 
       // Add the deletedItem to the availableItems array
       setAvailableItems((prevAvailableItems) => [
@@ -68,7 +66,7 @@ const ChipComponent = (props) => {
         deletedItem,
       ]);
     },
-    [selectedItems, availableItems, setSelectedItems, setAvailableItems]
+    [selectedItems, availableItems, addChip, setAvailableItems]
   );
 
   // This handleKeyDownPress function handles the keydown event when the filter term is empty
