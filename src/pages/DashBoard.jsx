@@ -74,7 +74,7 @@ const DashBoard = () => {
 
   return (
     <div>
-      <div className="flex flex-row flex-wrap">
+      <div className="flex flex-row flex-wrap items-center justify-around">
         {/* CustomDropdown for Experience */}
         <CustomDropDown
           title="Experience"
@@ -151,14 +151,14 @@ const DashBoard = () => {
             {/* Div element to serve as the last element for the IntersectionObserver */}
             <div ref={lastElementRef}></div>
             {/* Loading indicator */}
-            {jobFetchLoading && (
-              <Box sx={{ width: "100%" }}>
-                <LinearProgress />
-              </Box>
-            )}
           </>
         )}
       </Grid>
+      {jobFetchLoading && (
+        <Box className="my-5" sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      )}
     </div>
   );
 };

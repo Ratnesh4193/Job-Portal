@@ -1,6 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { capitalizeFirstCharacter } from "../utils/utils";
+import { useState } from "react";
 
 // Component for displaying the job role
 const JobRole = ({ name, role, location, img }) => {
@@ -23,7 +24,7 @@ const JobRole = ({ name, role, location, img }) => {
 // Component for displaying a job card
 const JobCard = (props) => {
   const { job } = props;
-
+  const [expanded, setExpanded] = useState(false);
   return (
     <Paper className="p-4">
       {/* Display the job role */}
@@ -55,9 +56,11 @@ const JobCard = (props) => {
           <div className="text-gray-900 text-start font-bold tracking-wide">
             About us
           </div>
-          <div className="max-w-md">
+          <div className="max-w-md overflow-auto">
             <p className="overflow-hidden text-gray-700 leading-relaxed bg-gradient-to-b from-transparent to-gray-300">
-              {job.jobDetailsFromCompany.length > 200
+              {expanded
+                ? job.jobDetailsFromCompany
+                : job.jobDetailsFromCompany.length > 200
                 ? `${job.jobDetailsFromCompany.substring(0, 200)}...`
                 : job.jobDetailsFromCompany}
             </p>
@@ -68,7 +71,10 @@ const JobCard = (props) => {
       {/* Display additional job details */}
       <div className=" bg-gray-300 p-4">
         {/* Button to view the job details */}
-        <div className="cursor-pointer text-blue-500 font-bold p-2">
+        <div
+          className="cursor-pointer text-blue-500 font-bold p-2"
+          onClick={() => setExpanded(!expanded)}
+        >
           View Job
         </div>
 
